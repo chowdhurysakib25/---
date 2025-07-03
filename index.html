@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Auto Ad Clicker - PC Mode</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background-color: #4B0082;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+    header {
+      margin: 20px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .controls {
+      margin-bottom: 20px;
+    }
+    .controls button {
+      background-color: #6A0DAD;
+      border: none;
+      color: #fff;
+      padding: 10px 20px;
+      margin: 0 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .controls button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .ad-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 200px);
+      grid-template-rows: repeat(2, 200px);
+      gap: 10px;
+    }
+    .ad-grid iframe {
+      width: 200px;
+      height: 200px;
+      border: none;
+    }
+    .countdown {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background: #fff;
+      color: #4B0082;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>PC Mode</header>
+  <div class="controls">
+    <button id="startBtn">Start Auto Clicker</button>
+    <button id="stopBtn" disabled>Stop</button>
+  </div>
+  
+  <div class="overlay" id="overlay">
+    <div class="ad-grid">
+      <iframe src="https://www.profitableratecpm.com/g59562u52u?key=ca86799f031389f5e067af75c12aa43f5e067af75c12aa43f5e067af75c12aa43f5e067af75c12aa43f5e067af75c12aa43f5e067af75c12aa43f5e067af75c12aa43f5e"></iframe>
+      <iframe src="https://www.profitableratecpm.com/g59562u52u?key=ca86799f031389f5e067af75c12aa43f5e067af75c12aa43f5e067af75c12aa43f5e"></iframe>
+      <iframe src="https://www.profitableratecpm.com/g59562u52u?key=ca86799f031389f5e067af75c12aa43f5e067af75c12aa43f5e"></iframe>
+      <iframe src="https://www.profitableratecpm.com/g59562u52u?key=ca86799f031389f5e067af75c12aa43f5e067af75c12aa43f5e"></iframe>
+    </div>
+  </div>
+  
+  <div class="countdown" id="countdown">2</div>
+  
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn  = document.getElementById('stopBtn');
+    const overlay  = document.getElementById('overlay');
+    const countdownEl = document.getElementById('countdown');
+
+    let cycleTimer = null;
+    let state = 'stopped'; // 'running'|'paused'
+    let timeLeft = 2;
+
+    function updateCountdown() {
+      countdownEl.textContent = timeLeft;
+    }
+
+    function startCycle() {
+      state = 'running';
+      startBtn.disabled = true;
+      stopBtn.disabled  = false;
+      showAds();
+    }
+
+    function stopCycle() {
+      state = 'stopped';
+      startBtn.disabled = false;
+      stopBtn.disabled  = true;
+      clearTimeout(cycleTimer);
+      overlay.style.display = 'none';
+      timeLeft = 5;
+      updateCountdown();
+    }
+
+    function showAds() {
+      if (state !== 'running') return;
+      timeLeft = 2;
+      overlay.style.display = 'flex';
+      updateCountdown();
+      countdownTick('show');
+    }
+
+    function hideAds() {
+      if (state !== 'running') return;
+      timeLeft = 2;
+      overlay.style.display = 'none';
+      updateCountdown();
+      countdownTick('hide');
+    }
+
+    function countdownTick(phase) {
+      cycleTimer = setTimeout(() => {
+        timeLeft--;
+        updateCountdown();
+        if (timeLeft > 0) {
+          countdownTick(phase);
+        } else {
+          if (phase === 'show') {
+            hideAds();
+          } else {
+            showAds();
+          }
+        }
+      }, 1000);
+    }
+
+    startBtn.addEventListener('click', startCycle);
+    stopBtn.addEventListener('click', stopCycle);
+  </script>
+</body>
+</html>
